@@ -27,6 +27,18 @@ app.post("/api/products", async (req, res) => {
     }
 });
 
+app.delete("/api/products/:id", async (req, res) => {
+    const { id } = req.params
+    try {
+        await Product.findByIdAndDelete(id);
+        console.log("Product deleted successfully");
+        res.status(200).json({ success: true, msg: "Product deleted successfully" })
+    }
+    catch (err) {
+        res.status(404).json({ success: false, msg: "Product not found" });
+    }
+})
+
 app.listen(5000, () => {
     connectDB();  // Connect to MongoDB
 });
