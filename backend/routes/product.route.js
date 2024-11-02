@@ -1,22 +1,14 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Product from '../models/product.model.js';
+import { getProduct } from '../controllers/product.controller.js';
 
 const router = express.Router();
 
 
-router.get("/api/products", async (req, res) => {
-    try {
-        const products = await Product.find();
-        console.log("All products found");
-        res.status(200).json({ success: true, data: products });
-    } catch (err) {
-        console.error("Error in getting products: ", err.message)
-        res.status(500).json({ success: false, msg: "Server error" });
-    }
-})
+router.get("/", getProduct)
 
-router.post("/api/products", async (req, res) => {
+router.post("/", async (req, res) => {
     const product = req.body;
 
     if (!product.name || !product.price || !product.image) {
@@ -34,7 +26,7 @@ router.post("/api/products", async (req, res) => {
     }
 });
 
-router.put("/api/products/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
     const { id } = req.params
     const product = req.body;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -52,7 +44,7 @@ router.put("/api/products/:id", async (req, res) => {
 
     }
 })
-router.delete("/api/products/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
     const { id } = req.params
     try {
         await Product.findByIdAndDelete(id);
@@ -63,4 +55,6 @@ router.delete("/api/products/:id", async (req, res) => {
         res.status(404).json({ success: false, msg: "Product not found" });
     }
 })
+
+export default router;
 
