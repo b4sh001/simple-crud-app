@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import Product from "../models/product.model.js";
 
 
 export const getProduct = async (req, res) => {
@@ -9,6 +10,23 @@ export const getProduct = async (req, res) => {
         res.status(200).json({ success: true, data: products });
     } catch (err) {
         console.error("Error in getting products: ", err.message)
+        res.status(500).json({ success: false, msg: "Server error" });
+    }
+}
+export const createProduct = async (req, res) => {
+    const product = req.body;
+
+    if (!product.name || !product.price || !product.image) {
+        return res.status(400).json({ success: false, message: "Please provide all fields" });
+    }
+
+    const newProduct = new Product(product);
+
+    try {
+        await newProduct.save();
+        res.status(201).json({ success: true, data: newProduct });
+    } catch (err) {
+        console.error("Error in creating new Product: ", err.message)
         res.status(500).json({ success: false, msg: "Server error" });
     }
 }
