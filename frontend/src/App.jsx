@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
-
 function App() {
   return (
     <>
-      <Button>Hello</Button>
+      <h1 className="text-red-600">Hello</h1>
     </>
   );
 }
